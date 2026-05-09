@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<body>
+  <h1 id="price">Waiting...</h1>
+
+<script>
+  const ws = new WebSocket("ws://localhost:8080");
+
+  ws.onmessage = (event) => {
+    const data = JSON.parse(event.data);
+
+    let output = "";
+
+    if (Array.isArray(data)) {
+      data.forEach(item => {
+        output += `${item.exchange} → Bid: ${item.bid}, Ask: ${item.ask}\n`;
+      });
+    } else {
+      output = `
+Pair: ${data.pair}
+
+🟢 BUY FROM: ${data.buyExchange} @ ${data.buyPrice}
+🔴 SELL TO: ${data.sellExchange} @ ${data.sellPrice}
+
+📈 Spread: ${(data.netSpread * 100).toFixed(2)}%
+      `;
+    }
+
+    document.getElementById("price").innerText = output;
+  };
+</script>
+</body>
+</html>
