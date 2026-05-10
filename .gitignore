@@ -1,4 +1,5 @@
-.env
-node_modules/
+
 dist/
 *.db
+node_modules
+.env
