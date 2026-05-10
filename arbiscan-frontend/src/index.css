@@ -1,0 +1,275 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 215 28% 5%;
+    --foreground: 210 17% 82%;
+    --card: 215 22% 11%;
+    --card-foreground: 210 17% 82%;
+    --popover: 215 22% 11%;
+    --popover-foreground: 210 17% 82%;
+    --primary: 212 100% 67%;
+    --primary-foreground: 215 28% 5%;
+    --secondary: 215 14% 15%;
+    --secondary-foreground: 210 17% 82%;
+    --muted: 215 14% 15%;
+    --muted-foreground: 215 10% 40%;
+    --accent: 215 14% 15%;
+    --accent-foreground: 210 17% 82%;
+    --destructive: 350 100% 55%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 215 14% 18%;
+    --input: 215 14% 18%;
+    --ring: 212 100% 67%;
+    --radius: 0.5rem;
+    --success: 152 100% 39%;
+    --warning: 40 100% 50%;
+    --sidebar-background: 215 28% 5%;
+    --sidebar-foreground: 210 17% 82%;
+    --sidebar-primary: 212 100% 67%;
+    --sidebar-primary-foreground: 215 28% 5%;
+    --sidebar-accent: 215 14% 15%;
+    --sidebar-accent-foreground: 210 17% 82%;
+    --sidebar-border: 215 14% 18%;
+    --sidebar-ring: 212 100% 67%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: system-ui, -apple-system, sans-serif;
+  }
+}
+
+@layer utilities {
+  .font-mono-data {
+    font-family: 'JetBrains Mono', 'Monaco', 'Cascadia Code', monospace;
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+@layer components {
+  .arbiscan-shell {
+    @apply min-h-screen overflow-hidden bg-[#071018] px-4 py-3 text-slate-100 sm:px-6 lg:px-8;
+    background:
+      radial-gradient(circle at 22% 0%, rgba(20, 184, 166, 0.14), transparent 28rem),
+      radial-gradient(circle at 72% 12%, rgba(56, 189, 248, 0.11), transparent 24rem),
+      linear-gradient(135deg, #071018 0%, #0d1822 48%, #111827 100%);
+  }
+
+  .top-strip {
+    @apply mx-auto mb-4 flex max-w-[1500px] items-center justify-between gap-4 border-b border-cyan-100/10 pb-3 text-xs font-semibold uppercase tracking-wide text-slate-300;
+  }
+
+  .status-dot {
+    @apply h-2 w-2 rounded-full shadow-[0_0_16px_currentColor];
+  }
+
+  .dashboard-grid {
+    @apply mx-auto grid max-w-[1500px] grid-cols-1 gap-5 lg:grid-cols-[minmax(0,1fr)_260px];
+  }
+
+  .main-panel {
+    @apply min-w-0;
+  }
+
+  .brand-row {
+    @apply mb-5 flex flex-col justify-between gap-4 md:flex-row md:items-end;
+  }
+
+  .brand-lockup {
+    @apply flex min-w-0 items-center gap-4;
+  }
+
+  .brand-lockup img {
+    @apply h-14 w-14 shrink-0 rounded-lg border border-cyan-100/10 bg-slate-950/60 object-cover shadow-[0_0_24px_rgba(125,211,252,0.18)];
+  }
+
+  .brand-row h1 {
+    @apply mt-1 text-2xl font-black tracking-normal text-slate-50 sm:text-3xl;
+  }
+
+  .eyebrow {
+    @apply text-xs font-bold uppercase tracking-wide text-cyan-200/70;
+  }
+
+  .search-box {
+    @apply flex h-10 w-full items-center gap-2 rounded-md border border-cyan-100/10 bg-slate-950/50 px-3 text-slate-400 shadow-inner md:w-72;
+  }
+
+  .search-box input {
+    @apply min-w-0 flex-1 bg-transparent text-sm text-slate-100 outline-none placeholder:text-slate-500;
+  }
+
+  .metric-grid {
+    @apply grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4;
+  }
+
+  .metric-card {
+    @apply rounded-lg border border-cyan-100/10 bg-slate-800/60 p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04),0_18px_60px_rgba(0,0,0,0.18)] backdrop-blur;
+  }
+
+  .metric-card p {
+    @apply text-xs font-black uppercase tracking-wide text-slate-300/80;
+  }
+
+  .metric-card strong {
+    @apply mt-3 block font-mono-data text-3xl font-black text-cyan-100;
+  }
+
+  .table-wrap {
+    @apply mt-6 overflow-x-auto rounded-lg border border-cyan-100/10 bg-slate-950/30;
+  }
+
+  .table-wrap table {
+    @apply w-full min-w-[920px] border-collapse font-mono-data text-sm;
+  }
+
+  .table-wrap th {
+    @apply border-b border-cyan-100/10 px-4 py-4 text-left text-xs font-black uppercase tracking-wide text-slate-300;
+  }
+
+  .table-wrap td {
+    @apply border-b border-cyan-100/10 px-4 py-3 font-bold text-slate-100;
+  }
+
+  .table-wrap tr {
+    @apply transition-colors;
+  }
+
+  .table-wrap tbody tr {
+    @apply cursor-pointer hover:bg-cyan-100/5;
+  }
+
+  .active-row {
+    @apply bg-cyan-100/10;
+  }
+
+  .pair-cell {
+    @apply text-base font-black;
+  }
+
+  .exchange-badge {
+    @apply inline-flex rounded bg-slate-950/80 px-2 py-1 text-[11px] font-black uppercase tracking-wide text-slate-100 ring-1 ring-cyan-100/10;
+  }
+
+  .positive,
+  .profit {
+    @apply text-emerald-300;
+  }
+
+  .age-cell {
+    @apply text-rose-300;
+  }
+
+  .empty-state {
+    @apply h-36 text-center text-slate-400;
+  }
+
+  .filters-panel {
+    @apply rounded-lg border border-cyan-100/10 bg-slate-950/30 p-5 text-sm text-slate-200;
+  }
+
+  .panel-title {
+    @apply mb-6 flex items-center gap-2 text-xs font-black uppercase tracking-wide text-slate-300;
+  }
+
+  .filter-group {
+    @apply border-b border-cyan-100/10 py-5 first:pt-0 last:border-b-0;
+  }
+
+  .filter-group p {
+    @apply mb-3 text-xs font-black uppercase tracking-wide text-slate-400;
+  }
+
+  .check-row {
+    @apply mb-3 flex items-center gap-3;
+  }
+
+  .check-row button {
+    @apply grid h-5 w-5 place-items-center rounded border border-cyan-100/20 bg-slate-800 text-cyan-100;
+  }
+
+  .check-row button[aria-pressed="true"] {
+    @apply border-cyan-200 bg-cyan-200 text-slate-950;
+  }
+
+  .range-label {
+    @apply flex items-center justify-between gap-3;
+  }
+
+  .range-label strong {
+    @apply font-mono-data text-cyan-100;
+  }
+
+  .filter-group input[type="range"] {
+    @apply w-full accent-cyan-200;
+  }
+
+  .watchlist {
+    @apply flex flex-wrap gap-2;
+  }
+
+  .watchlist span {
+    @apply rounded border border-cyan-100/10 bg-slate-800/70 px-2 py-1 font-mono-data text-xs font-bold text-slate-300;
+  }
+
+  .system-card {
+    @apply mt-5 flex gap-3 rounded-lg border border-cyan-100/10 bg-slate-800/40 p-3 text-xs text-slate-400;
+  }
+
+  .system-card p {
+    @apply mb-1 font-black uppercase tracking-wide text-slate-200;
+  }
+
+  .system-card span {
+    @apply block break-all font-mono-data;
+  }
+
+  .active-ticket {
+    @apply fixed inset-x-0 bottom-0 z-20 grid grid-cols-2 items-center gap-4 border-t border-cyan-100/10 bg-slate-950/90 px-4 py-3 shadow-[0_-18px_60px_rgba(0,0,0,0.35)] backdrop-blur md:grid-cols-[1.4fr_auto_repeat(4,1fr)_auto] md:px-8;
+  }
+
+  .active-ticket p {
+    @apply text-[11px] font-black uppercase tracking-wide text-slate-400;
+  }
+
+  .active-ticket strong {
+    @apply font-mono-data text-xl font-black text-slate-50;
+  }
+
+  .ticket-spread {
+    @apply w-fit rounded bg-emerald-400/15 px-3 py-1 font-mono-data text-sm font-black text-emerald-300;
+  }
+
+  .active-ticket button {
+    @apply grid h-10 w-10 place-items-center rounded-md border border-cyan-100/10 bg-slate-800 text-slate-200 transition hover:bg-slate-700;
+  }
+
+  .toast-note {
+    @apply fixed right-4 top-16 z-30 flex max-w-[calc(100vw-2rem)] items-center gap-2 rounded-md border border-amber-300/20 bg-amber-950/90 px-4 py-3 text-sm text-amber-100 shadow-xl;
+  }
+}
+
+@keyframes row-flash {
+  0% { background-color: rgba(0, 200, 83, 0.15); }
+  100% { background-color: transparent; }
+}
+
+.row-flash {
+  animation: row-flash 1s linear forwards;
+}
+
+@keyframes ping-dot {
+  0% { transform: scale(1); opacity: 1; }
+  75% { transform: scale(2); opacity: 0; }
+  100% { transform: scale(2); opacity: 0; }
+}
