@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "https://arbiscan-caw5.onrender.com";
-const WS_URL = import.meta.env.VITE_WS_URL ?? "ws://localhost:8080";
+const WS_URL = import.meta.env.VITE_WS_URL;
 
 const EXCHANGES = ["Binance", "Coinbase", "Kraken", "OKX"] as const;
 const WATCHED_PAIRS = ["BTC/USDT", "ETH/USDT", "SOL/USDT", "XRP/USDT", "BNB/USDT", "DOGE/USDT"];

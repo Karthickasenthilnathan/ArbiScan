@@ -19,15 +19,19 @@ import { WebSocketServer, WebSocket } from 'ws';
 import ccxt from 'ccxt';
 
 const app = express();
-const PORT = 3000;
-const WS_PORT = 8080;
+const PORT = process.env.PORT || 3000;
+
 const OPPORTUNITY_MAX_AGE_MS = Number(process.env.OPPORTUNITY_MAX_AGE_MS ?? 30_000);
 const DB_RETENTION_MS = Number(process.env.DB_RETENTION_MS ?? 5 * 60_000);
 const PRICE_POLL_INTERVAL = parseInt(process.env.PRICE_POLL_INTERVAL) || 5000;
 const MIN_THRESHOLD = Number(process.env.MIN_SPREAD_THRESHOLD ?? 0.002);
 
 app.use(cors({
-  origin: process.env.FRONTEND_URL
+  origin: [
+    process.env.FRONTEND_URL,
+    "http://localhost:5173",
+    "http://localhost:5174"
+  ]
 }));
 app.use(express.json());
 
@@ -68,14 +72,15 @@ app.get(['/history', '/api/history'], (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`HTTP Server running on http://localhost:${PORT}`);
+const server = app.listen(PORT, () => {
+  console.log(`HTTP Server running on port ${PORT}`);
 });
 
 // -------------------- WEBSOCKET --------------------
 
-const wss = new WebSocketServer({ port: WS_PORT });
-console.log(`WebSocket Server running on ws://localhost:${WS_PORT}`);
+const wss = new WebSocketServer({ server });
+
+console.log("WebSocket Server attached to HTTP server");
 
 const clients = new Set();
 
