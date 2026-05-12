@@ -27,7 +27,7 @@ const PRICE_POLL_INTERVAL = parseInt(process.env.PRICE_POLL_INTERVAL) || 5000;
 const MIN_THRESHOLD = Number(process.env.MIN_SPREAD_THRESHOLD ?? 0.002);
 
 app.use(cors({
-  origin: "https://arbi-scan.vercel.app"
+  origin: process.env.FRONTEND_URL
 }));
 app.use(express.json());
 
