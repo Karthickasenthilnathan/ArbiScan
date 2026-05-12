@@ -26,7 +26,9 @@ const DB_RETENTION_MS = Number(process.env.DB_RETENTION_MS ?? 5 * 60_000);
 const PRICE_POLL_INTERVAL = parseInt(process.env.PRICE_POLL_INTERVAL) || 5000;
 const MIN_THRESHOLD = Number(process.env.MIN_SPREAD_THRESHOLD ?? 0.002);
 
-app.use(cors());
+app.use(cors({
+  origin: "https://arbi-scan.vercel.app"
+}));
 app.use(express.json());
 
 // -------------------- REST API --------------------

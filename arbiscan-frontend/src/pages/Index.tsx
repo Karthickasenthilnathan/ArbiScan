@@ -15,7 +15,7 @@ import {
   WifiOff,
 } from "lucide-react";
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:3000";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "https://arbiscan-caw5.onrender.com";
 const WS_URL = import.meta.env.VITE_WS_URL ?? "ws://localhost:8080";
 
 const EXCHANGES = ["Binance", "Coinbase", "Kraken", "OKX"] as const;
