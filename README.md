@@ -231,6 +231,4 @@ cd arbiscan-backend
 node --check server.js
 ```
 
-## License
 
-ISC
