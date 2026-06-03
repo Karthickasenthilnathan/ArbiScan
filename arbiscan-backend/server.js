@@ -1,9 +1,12 @@
-import db, {
+
+
+import {
   insertOpportunity,
   getFreshOpportunities,
   getFreshOpportunitiesByPair,
   getHistoryByPair,
   deleteExpiredOpportunities,
+  closeStorage,
 } from './db/database.js';
 
 import dotenv from 'dotenv';
@@ -40,16 +43,16 @@ app.use(express.json());
 
 // -------------------- REST API --------------------
 
-app.get('/', (req, res) => {
-  res.json({ message: 'ArbiScan backend running 🚀' });
-});
+app.get(['/opportunities', '/api/opportunities'], async (req, res) => {
+  console.log('Arbiscan backend running');
+})
 
 function parsePositiveInt(value, fallback) {
   const parsed = Number.parseInt(value, 10);
   return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback;
 }
 
-app.get(['/opportunities', '/api/opportunities'], (req, res) => {
+app.get(['/opportunities', '/api/opportunities'], async (req, res) => {
   try {
     const limit = parseInt(req.query.limit) || 50;
 
@@ -62,8 +65,8 @@ app.get(['/opportunities', '/api/opportunities'], (req, res) => {
     const pair = req.query.pair;
 
     const result = pair
-      ? getFreshOpportunitiesByPair.all(pair, freshSince, limit)
-      : getFreshOpportunities.all(freshSince, limit);
+  ? await getFreshOpportunitiesByPair(pair, freshSince, limit)
+  : await getFreshOpportunities(freshSince, limit);
 
     res.json(result);
 
@@ -72,12 +75,12 @@ app.get(['/opportunities', '/api/opportunities'], (req, res) => {
   }
 });
 
-app.get(['/history', '/api/history'], (req, res) => {
+app.get(['/history', '/api/history'], async (req, res) => {
   try {
     const pair = req.query.pair || 'BTC/USD';
     const limit = parseInt(req.query.limit) || 100;
 
-    const history = getHistoryByPair.all(pair, limit);
+    const history = await getHistoryByPair.all(pair, limit);
 
     res.json(history);
 
@@ -190,7 +193,7 @@ async function fetchPrices() {
       });
 
       if (data.length >= 2) {
-        findArbitrage(data, symbol);
+       await findArbitrage(data, symbol);
       } else {
         console.warn(`[${symbol}] Not enough exchange data to compare`);
       }
@@ -208,7 +211,7 @@ const fees = {
   Kraken: 0.0016,
 };
 
-function findArbitrage(data, symbol) {
+async function findArbitrage(data, symbol) {
   console.log(`🔍 Running arbitrage check for ${symbol}...`);
   console.log('Data:', data);
 
@@ -260,17 +263,7 @@ function findArbitrage(data, symbol) {
       timestamp: Date.now(),
     };
 
-    insertOpportunity.run(
-      opportunity.pair,
-      opportunity.buyOn,
-      opportunity.sellOn,
-      opportunity.buyPrice,
-      opportunity.sellPrice,
-      opportunity.netSpread,
-      opportunity.estProfit,
-      opportunity.timestamp
-    );
-
+    await insertOpportunity(opportunity);
     broadcastIfNew(opportunity);
 
     console.log(
@@ -279,7 +272,7 @@ function findArbitrage(data, symbol) {
   }
 }
 
-// -------------------- SCHEDULERS --------------------
+// -------------------- Schedulers --------------------
 
 setInterval(async () => {
   try {
@@ -293,14 +286,14 @@ console.log(
   `[Scheduler] Price monitoring started — polling every ${PRICE_POLL_INTERVAL}ms`
 );
 
-// Cleanup old DB records
+// Cleaning up  old DB records
 
-setInterval(() => {
+setInterval(async () => {
   try {
 
     const cutoff = Date.now() - DB_RETENTION_MS;
 
-    const result = deleteExpiredOpportunities.run(cutoff);
+    const result = await deleteExpiredOpportunities(cutoff);
 
     if (result.changes > 0) {
       console.log(`[Cleanup] Deleted ${result.changes} expired opportunities`);
@@ -311,20 +304,20 @@ setInterval(() => {
   }
 }, OPPORTUNITY_MAX_AGE_MS);
 
-// -------------------- GRACEFUL SHUTDOWN --------------------
+// GRACEFUL SHUTDOWN 
 
 process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
 process.on('SIGINT', () => gracefulShutdown('SIGINT'));
 
-function gracefulShutdown(signal) {
+async function gracefulShutdown(signal) {
 
   console.log(`[Server] ${signal} received — shutting down gracefully`);
 
   wss.close(() => console.log('[WebSocket] Server closed'));
 
-  db.close();
+  await closeStorage();
 
-  console.log('[Database] SQLite connection closed');
+  console.log('Redis connection closed');
 
   process.exit(0);
 }
