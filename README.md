@@ -258,6 +258,4 @@ npm run preview
 - The frontend watchlist includes `BTC/USDT`, `ETH/USDT`, `SOL/USDT`, `XRP/USDT`, `BNB/USDT`, and `DOGE/USDT`, while the backend currently polls `BTC/USD` and `ETH/USD`.
 - The frontend normalizes `/USD` pairs into `/USDT` for display.
 
-## License
 
-ISC
